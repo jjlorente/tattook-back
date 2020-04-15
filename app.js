@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 
 const loginRoutes = require('./modules/login/login.routes');
+const locationRoutes = require('./modules/location/location.routes');
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -14,6 +15,7 @@ dotenv.config();
 
 //TODO: cargar rutas
 app.use('/login', loginRoutes);
+app.use('/location', locationRoutes);
 
 const server = require("./server")(app);
 
