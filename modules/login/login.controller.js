@@ -16,6 +16,8 @@ module.exports = {
         if (customer) {
           if(customer.role !== 'tattoo_artist' && customer.role != userRole){
               customer.role = userRole;
+              customer.full_address = address;
+              customer.location = { type: "Point", coordinates: [location.lng, location.lat] };
               const customerUpdated = await customer.save()
               console.log("USUARIO EXISTENTE // UPDATE ROLE Y DATA");
               console.log(customerUpdated);
