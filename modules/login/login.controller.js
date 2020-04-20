@@ -12,20 +12,20 @@ module.exports = {
       const location      = req.body.location ? req.body.location : null;
       const address       = req.body.address ? req.body.address : null;
       try {
-        const customer = await customerModel.findOneAndUpdate({email: userEmail}, { lastDate: new Date() });
+        let customer = await customerModel.findOneAndUpdate({email: userEmail}, { lastDate: new Date() });
         if (customer) {
           if(customer.role !== 'tattoo_artist' && customer.role != userRole){
               customer.role = userRole;
               customer.full_address = address;
               customer.location = { type: "Point", coordinates: [location.lng, location.lat] };
-              const customerUpdated = await customer.save()
+              customer = await customer.save()
               console.log("USUARIO EXISTENTE // UPDATE ROLE Y DATA");
               console.log(customerUpdated);
           } else {
             console.log(customer)
           }
         } else {
-          const newCustomer = new customerModel({ 
+          customer = new customerModel({ 
             name: userName, 
             provider: userProvider,
             email: userEmail,
@@ -33,13 +33,13 @@ module.exports = {
             picture: userPicture,
             lastDate: new Date()
           });
-          if(location) newCustomer.location = { type: "Point", coordinates: [location.lng, location.lat] };
-          if(address) newCustomer.full_address = address;
-          await newCustomer.save()
+          if(location) customer.location = { type: "Point", coordinates: [location.lng, location.lat] };
+          if(address) customer.full_address = address;
+          await customer.save()
           console.log("USUARIO NUEVO");
-          console.log(newCustomer);
+          console.log(customer);
         }
-        const token = tokenModel.getNewToken(userEmail);
+        const token = tokenModel.getNewToken(userEmail, customer._id);
         res.json({token: token}).send();
       } catch (error) {
         console.error(error);
