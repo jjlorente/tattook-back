@@ -36,5 +36,12 @@ module.exports = {
   setOne: async (req, res) => {
   },
   deleteOne: async (req, res) => {
+    const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
+    try{
+      const portfolioDeleted = await portfolioModel.findOneAndDelete({"_id": portfolioId})
+      return res.json(portfolioDeleted).send()
+    } catch(error){
+      return res.status(500).json({error: "Error en borrar el portfolio"}).send();
+    }
   }
 }
