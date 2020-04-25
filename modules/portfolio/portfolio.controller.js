@@ -34,6 +34,15 @@ module.exports = {
     }
   },
   setOne: async (req, res) => {
+    const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
+    const name = req.body.name ? req.body.name : null;
+    if(!name) return res.staus(401).json({error: "No se ha encontrado el parametro name"}).send();
+    try {
+      const portfolio = await portfolioModel.updateOne({"_id": portfolioId}, {name: name});
+      return res.json(portfolio).send()
+    } catch (error) {
+      return res.status(500).json({message: "Error en editar el portfolio", error}).send();
+    }
   },
   deleteOne: async (req, res) => {
     const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
