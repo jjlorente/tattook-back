@@ -1,6 +1,6 @@
 const portfolioModel = require("./portfolio.model").PortfolioModel;
 const workModel = require("../work/work.model").WorkModel
-const workPortfolioModel = require("./work_portfolio.model").WorkPortfolioModel
+const workPortfolioModel = require("../work/work_portfolio.model").WorkPortfolioModel
 
 module.exports = {
   getOne: async (req, res) => {
