@@ -57,12 +57,14 @@ module.exports = {
   },
   newImage: async (req, res) => {
     const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
+    const dataType = req.body.dataType ? req.body.dataType : null;
     const image = req.body.image ? req.body.image : null;
     if(!image) return res.status(401).json({error: "El parámetro image no puede ser null"}).send();
+    if(!dataType) return res.status(401).json({error: "El parámetro dataType no puede ser null"}).send();
     try {
       const work = new workModel();
       work.picture = image;
-      work.formatType = 'base64';
+      work.formatType = dataType;
       work._id_artist = req.user.id;
       work._id_portfolio = portfolioId;
       const workSaved = await work.save();
