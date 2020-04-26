@@ -1,5 +1,6 @@
 const portfolioModel = require("./portfolio.model").PortfolioModel;
 const workModel = require("../work/work.model").WorkModel
+const workPortfolioModel = require("./work_portfolio.model").WorkPortfolioModel
 
 module.exports = {
   getOne: async (req, res) => {
@@ -65,6 +66,10 @@ module.exports = {
       work._id_artist = req.user.id;
       work._id_portfolio = portfolioId;
       const workSaved = await work.save();
+      const workPortfolio = new workPortfolioModel();
+      workPortfolio._id_portfolio = portfolioId;
+      workPortfolio._id_work = workSaved._id;
+      await workPortfolio.save();
       return res.json(workSaved).send();
     } catch (error) {
       return res.status(500).json({error: "Error en guardar imagen"}).send();
