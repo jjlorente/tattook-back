@@ -55,7 +55,7 @@ module.exports = {
       return res.status(500).json({error: "Error en borrar el portfolio"}).send();
     }
   },
-  newImage: async (req, res) => {
+  newWorks: async (req, res) => {
     const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
     const dataType = req.body.dataType ? req.body.dataType : null;
     const image = req.body.image ? req.body.image : null;
@@ -64,7 +64,7 @@ module.exports = {
     try {
       const work = new workModel();
       work.picture = image;
-      work.formatType = dataType;
+      work.format_type = dataType;
       work._id_artist = req.user.id;
       work._id_portfolio = portfolioId;
       const workSaved = await work.save();
@@ -75,6 +75,15 @@ module.exports = {
       return res.json(workSaved).send();
     } catch (error) {
       return res.status(500).json({error: "Error en guardar imagen"}).send();
+    }
+  },
+  getWorks: async (req, res) =>{
+    const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
+    try {
+      const workList = await workModel.find({_id_portfolio: portfolioId})
+      return res.json(workList).send();
+    } catch (error) {
+      return res.status(500).json({error: "Error en recoger imagenes"}).send();
     }
   }
 }
