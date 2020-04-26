@@ -1,4 +1,5 @@
 const portfolioModel = require("./portfolio.model").PortfolioModel;
+const workModel = require("../work/work.model").WorkModel
 
 module.exports = {
   getOne: async (req, res) => {
@@ -51,6 +52,22 @@ module.exports = {
       return res.json(portfolioDeleted).send()
     } catch(error){
       return res.status(500).json({error: "Error en borrar el portfolio"}).send();
+    }
+  },
+  newImage: async (req, res) => {
+    const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
+    const image = req.body.image ? req.body.image : null;
+    if(!image) return res.status(401).json({error: "El parámetro image no puede ser null"}).send();
+    try {
+      const work = new workModel();
+      work.picture = image;
+      work.formatType = 'base64';
+      work._id_artist = req.user.id;
+      work._id_portfolio = portfolioId;
+      const workSaved = await work.save();
+      return res.json(workSaved).send();
+    } catch (error) {
+      return res.status(500).json({error: "Error en guardar imagen"}).send();
     }
   }
 }
