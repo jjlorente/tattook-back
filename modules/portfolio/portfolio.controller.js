@@ -28,7 +28,7 @@ module.exports = {
         portfolio = new portfolioModel();
         portfolio.name = namePortfolio;
         portfolio._id_user = userId;
-        const portfolioData = await portfolio.end();
+        const portfolioData = await portfolio.save();
         return res.json(portfolioData).end();
       }else{
         return res.status(400).send("Ya existe un portfolio con este nombre.").end();
