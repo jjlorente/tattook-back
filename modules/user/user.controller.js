@@ -6,9 +6,9 @@ module.exports = {
       const userId = req.user.id ? req.user.id : null;
       if(!userId) return res.status(400).send("userId required");
       const user = await customerModel.find({"_id": userId})
-      return res.json(user).send();
+      return res.json(user).end();
     } catch (error) {
-      return res.status(500).send("Error find userId");
+      return res.status(500).send("Error find userId").end();
     }
   }
 }

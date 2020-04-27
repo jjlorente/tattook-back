@@ -1,6 +1,8 @@
 const portfolioModel = require("./portfolio.model").PortfolioModel;
 const workModel = require("../work/work.model").WorkModel
 const workPortfolioModel = require("../work/work_portfolio.model").WorkPortfolioModel
+const thumbnailModel = require("../work/thumbnail.model").ThumbnailModel
+const imageUtils = require("../../core/image-utils");
 
 module.exports = {
   getOne: async (req, res) => {
@@ -10,9 +12,9 @@ module.exports = {
       const userId = req.user.id ? req.user.id : null;
       if(!userId) return res.status(400).send("UserId required");
       const portfolios = await portfolioModel.find({"_id_user": userId})
-      return res.json(portfolios).send();
+      return res.json(portfolios).end();
     } catch (error) {
-      return res.status(500).send("Error find portfolio");
+      return res.status(500).send("Error find portfolio").end();
     }
   },
   newOne: async (req, res) => {
@@ -72,6 +74,11 @@ module.exports = {
       workPortfolio._id_portfolio = portfolioId;
       workPortfolio._id_work = workSaved._id;
       await workPortfolio.save();
+      const workThumbnail = await imageUtils.getThumbnailFromBase64(workSaved.picture);
+      const thumbnail = new thumbnailModel();
+      thumbnail.picture = "data:image/jpeg;base64," + workThumbnail;
+      thumbnail._id_picture = workSaved._id;
+      await thumbnail.save();
       return res.json(workSaved).send();
     } catch (error) {
       return res.status(500).json({error: "Error en guardar imagen"}).send();
@@ -80,8 +87,13 @@ module.exports = {
   getWorks: async (req, res) =>{
     const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
     try {
-      const workList = await workModel.find({_id_portfolio: portfolioId})
-      return res.json(workList).send();
+      const workList = await workModel.find({_id_portfolio: portfolioId}, '_id');
+      const thumbPromisesList = workList.map(async (work) => {
+        return thumbnailModel.find({"_id_picture": work._id});
+      });
+      let thumbList = await Promise.all(thumbPromisesList);
+      thumbList = thumbList.map(t=>t[0]);
+      return res.json(thumbList).send();
     } catch (error) {
       return res.status(500).json({error: "Error en recoger imagenes"}).send();
     }
