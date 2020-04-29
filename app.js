@@ -11,7 +11,7 @@ const locationRoutes = require('./modules/location/location.routes');
 const portfolioRoutes = require('./modules/portfolio/portfolio.routes');
 const userRoutes = require('./modules/user/user.routes');
 
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' }));
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(cors());
 
