@@ -21,7 +21,13 @@ const WorkSchema = new Schema({
     description: {
       type: String,
       required: false
-    }
+    },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tag"
+      }
+    ]
 });
 
 module.exports.WorkModel = mongoose.model('Work', WorkSchema);
