@@ -17,11 +17,15 @@ app.use(cors());
 
 dotenv.config();
 
+app.get('/api/health', (req, res)=>{
+  res.status(200).json({status:'OK'}).end();
+})
+
 //TODO: cargar rutas
-app.use('/login', loginRoutes);
-app.use('/location', locationRoutes);
-app.use('/portfolio', jwtVerify, portfolioRoutes);
-app.use('/user', jwtVerify, userRoutes);
+app.use('/api/v1/login', loginRoutes);
+app.use('/api/v1/location', locationRoutes);
+app.use('/api/v1/portfolio', jwtVerify, portfolioRoutes);
+app.use('/api/v1/user', jwtVerify, userRoutes);
 
 const server = require("./server")(app);
 

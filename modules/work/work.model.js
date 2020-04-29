@@ -17,6 +17,10 @@ const WorkSchema = new Schema({
     format_type: {
       type: String,
       required: true
+    },
+    description: {
+      type: String,
+      required: false
     }
 });
 
