@@ -108,5 +108,10 @@ module.exports = {
     } catch (error) {
       return res.status(500).json({error: "Error en recoger imagenes"}).end();
     }
+  },
+  deleteWork: async (req, res) => {
+    const pictureId = req.query.pictureId ? req.query.pictureId : null;
+    if(!pictureId) return res.status(401).json({error: "El parámetro picture no puede ser null"}).end();
+    await workModel.deleteOne({"_id": pictureId});
   }
 }

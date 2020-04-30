@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const tagModel = require("./tag.model").TagModel;
+
 const Schema = mongoose.Schema;
 
 const WorkSchema = new Schema({
@@ -29,5 +31,13 @@ const WorkSchema = new Schema({
       }
     ]
 });
-
+WorkSchema.post('remove', (doc) => {
+  tagModel.updateMany(
+    {"_id": {$in: doc.tags}}, 
+    {$pull: {works: doc._id}},
+    (err, rows)=>{
+      if(err) console.log(err);
+      console.log(rows);
+    })
+})
 module.exports.WorkModel = mongoose.model('Work', WorkSchema);
