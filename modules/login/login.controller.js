@@ -20,7 +20,7 @@ module.exports = {
               customer.location = { type: "Point", coordinates: [location.lng, location.lat] };
               customer = await customer.save()
               console.log("USUARIO EXISTENTE // UPDATE ROLE Y DATA");
-              console.log(customerUpdated);
+              console.log(customer);
           } else {
             console.log(customer)
           }

@@ -24,6 +24,11 @@ const WorkSchema = new Schema({
       type: String,
       required: false
     },
+    uploadDate: {
+      type: Date, 
+      default: Date.now(),
+      required: true
+    },
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,

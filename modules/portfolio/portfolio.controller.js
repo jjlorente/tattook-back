@@ -59,6 +59,8 @@ module.exports = {
     }
   },
   newWorks: async (req, res) => {
+    if (req.timedout) return res.status(req.timedout.status).send("Timemout error: 30s").end();
+
     const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
     const dataType = req.body.dataType ? req.body.dataType : null;
     const image = req.body.image ? req.body.image : null;
@@ -110,8 +112,15 @@ module.exports = {
     }
   },
   deleteWork: async (req, res) => {
-    const pictureId = req.query.pictureId ? req.query.pictureId : null;
+    const pictureId = req.params.pictureId ? req.params.pictureId : null;
     if(!pictureId) return res.status(401).json({error: "El parámetro picture no puede ser null"}).end();
-    await workModel.deleteOne({"_id": pictureId});
+    try {
+      await thumbnailModel.deleteOne({"_id_picture": pictureId})
+      await workPortfolioModel.deleteMany({"_id_work": pictureId});
+      await workModel.deleteOne({"_id": pictureId});
+      return res.json().end();
+    } catch (error) {
+      return res.status(500).json({error: "Error en recoger imagenes"}).end();
+    }
   }
 }

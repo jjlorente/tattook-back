@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const bodyParser = require("body-parser");
+
 const cors = require('cors');
 
 const jwtVerify = require("./core/auth/middlewares/jwt-verify");
