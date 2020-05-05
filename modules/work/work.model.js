@@ -29,7 +29,6 @@ const WorkSchema = new Schema({
       default: Date.now(),
       required: true
     },
-    customer: [],
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,
