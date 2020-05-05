@@ -8,8 +8,8 @@ module.exports = {
   getAllWorks: async (req, res) =>{
     try {
       const workList = await workModel.find({}).sort({uploadDate: -1});
-      workList.each(function(err, doc) {
-        workList.customer = customerModel.find({_id: portfolioId}, doc._id_artist);
+      workList.each(function(err, work) {
+        workList.customer = customerModel.find({_id: work._id_artist});
       });
       return res.json(workList).end();
     } catch (error) {
