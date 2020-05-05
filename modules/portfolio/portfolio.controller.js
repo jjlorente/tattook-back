@@ -122,5 +122,18 @@ module.exports = {
     } catch (error) {
       return res.status(500).json({error: "Error en recoger imagenes"}).end();
     }
+  },
+  getAllWorks: async (req, res) =>{
+    try {
+      const workList = await workModel.find({}).sort({uploadDate: -1});
+      const thumbPromisesList = workList.map(async (work) => {
+        return thumbnailModel.find({"_id_picture": work._id});
+      });
+      let thumbList = await Promise.all(thumbPromisesList);
+      thumbList = thumbList.map(t=>t[0]);
+      return res.json(thumbList).end();
+    } catch (error) {
+      return res.status(500).json({error: "Error en recoger imagenes"}).end();
+    }
   }
 }
