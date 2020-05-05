@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const tagModel = require("./tag.model").TagModel;
-
+const customerModel = require("../user/user.model").UserModel;
 const Schema = mongoose.Schema;
 
 const WorkSchema = new Schema({
@@ -33,6 +33,12 @@ const WorkSchema = new Schema({
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Tag"
+      }
+    ],
+    customer: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Customer"
       }
     ]
 });
