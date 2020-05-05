@@ -8,11 +8,7 @@ module.exports = {
   getAllWorks: async (req, res) =>{
     try {
       const workList = await workModel.find({}).sort({uploadDate: -1});
-      const userPromisesList = workList.map(async (work) => {
-        return customerModel.find({"_id": work._id_artist});
-      });
-      let userList = await Promise.all(userPromisesList);
-      return res.json({works:workList, customer:userList}).end();
+      return res.json(workList).end();
     } catch (error) {
       return res.status(500).json({error: "Error en recoger imagenes"}).end();
     }
