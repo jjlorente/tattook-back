@@ -12,7 +12,7 @@ module.exports = {
         return customerModel.find({"_id": work._id_artist});
       });
       let userList = await Promise.all(userPromisesList);
-      return res.json(workList,userList).end();
+      return res.json({works: workList, users: userList}).end();
     } catch (error) {
       return res.status(500).json({error: "Error en recoger imagenes"}).end();
     }
