@@ -11,6 +11,7 @@ const loginRoutes = require('./modules/login/login.routes');
 const locationRoutes = require('./modules/location/location.routes');
 const portfolioRoutes = require('./modules/portfolio/portfolio.routes');
 const userRoutes = require('./modules/user/user.routes');
+const workRoutes = require('./modules/work/work.routes');
 
 app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' }));
 app.use(bodyParser.json({ limit: '10mb' }));
@@ -27,6 +28,7 @@ app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/location', locationRoutes);
 app.use('/api/v1/portfolio', jwtVerify, portfolioRoutes);
 app.use('/api/v1/user', jwtVerify, userRoutes);
+app.use('/api/v1/work', workRoutes);
 
 const server = require("./server")(app);
 

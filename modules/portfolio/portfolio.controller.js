@@ -122,15 +122,5 @@ module.exports = {
     } catch (error) {
       return res.status(500).json({error: "Error en recoger imagenes"}).end();
     }
-  },
-  getAllWorks: async (req, res) =>{
-    try {
-      const workList = await workModel.find({}).sort({uploadDate: -1});
-      console.log(workList);
-      return res.json(workList).end();
-    } catch (error) {
-      console.log("aa");
-      return res.status(500).json({error: "Error en recoger imagenes"}).end();
-    }
   }
 }

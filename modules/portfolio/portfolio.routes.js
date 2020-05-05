@@ -14,6 +14,5 @@ router.delete('/:portfolioId', PortfolioCtrl.deleteOne);
 router.get('/:portfolioId/image', PortfolioCtrl.getWorks);
 router.post('/:portfolioId/image', timeout('30s', {respond: false}), haltOnTimedout, PortfolioCtrl.newWorks);
 router.delete('/:portfolioId/image/:pictureId', PortfolioCtrl.deleteWork);
-router.get('/work', PortfolioCtrl.getAllWorks);
 
 module.exports = router;
