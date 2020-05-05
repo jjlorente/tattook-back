@@ -29,11 +29,7 @@ const WorkSchema = new Schema({
       default: Date.now(),
       required: true
     },
-    customer: [
-      {
-        type: String
-      }
-    ],
+    customer: [],
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,

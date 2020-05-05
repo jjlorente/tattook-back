@@ -9,7 +9,7 @@ module.exports = {
     try {
       const workList = await workModel.find({}).sort({uploadDate: -1});
       workList.each(function(err, doc) {
-        workList.customer.push(customerModel.find({_id: portfolioId}, doc._id_artist));
+        workList.customer = customerModel.find({_id: portfolioId}, doc._id_artist);
       });
       return res.json(workList).end();
     } catch (error) {
