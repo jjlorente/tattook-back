@@ -3,6 +3,7 @@ const thumbnailModel = require("../work/thumbnail.model").ThumbnailModel
 const workPortfolioModel = require("../work/work_portfolio.model").WorkPortfolioModel
 const imageUtils = require("../../core/image-utils");
 const customerModel = require("../user/user.model").CustomerModel;
+const favoriteModel = require("../favorite/favorite.model").FavoriteModel;
 
 module.exports = {
   getAllWorks: async (req, res) =>{
@@ -22,12 +23,24 @@ module.exports = {
       })
       const userList = await Promise.all(userPromises);
 
+      const likesPromises = workList.map(async (work)=>{
+        return favoriteModel.find({"_id_item":work._id}).countDocuments();
+      })
+      const likesList = await Promise.all(likesPromises);
+      
+      const likedPromises = workList.map(async (work)=>{
+        return favoriteModel.findOne({"_id_item":work._id,"_id_customer":req.user.id});
+      })
+      const likedList = await Promise.all(likedPromises);
+
       //pasamos por cada trabajo y unimos todos los datos en un objeto
       const workWithUser = workList.map((work, index)=>{
         return {
           thumb:thumbList[index],
           work: work,
-          user: userList[index]
+          user: userList[index],
+          likes: likesList[index],
+          liked: likedList[index]
         }
       })
       return res.json(workWithUser).end();

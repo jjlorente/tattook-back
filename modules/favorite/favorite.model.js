@@ -14,6 +14,11 @@ const FavoriteSchema = new Schema({
     _id_customer: {
         type: String,
         required: true
+    },
+    date: {
+        type: Date, 
+        default: Date.now(),
+        required: true
     }
 });
 

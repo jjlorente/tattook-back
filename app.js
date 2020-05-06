@@ -29,8 +29,8 @@ app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/location', locationRoutes);
 app.use('/api/v1/portfolio', jwtVerify, portfolioRoutes);
 app.use('/api/v1/user', jwtVerify, userRoutes);
-app.use('/api/v1/work', workRoutes);
-app.use('/api/v1/favorite', favoriteRoutes);
+app.use('/api/v1/work', jwtVerify, workRoutes);
+app.use('/api/v1/favorite', jwtVerify, favoriteRoutes);
 
 const server = require("./server")(app);
 
