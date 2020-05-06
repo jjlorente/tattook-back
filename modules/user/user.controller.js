@@ -3,7 +3,12 @@ const customerModel = require("../user/user.model").CustomerModel;
 module.exports = {
   getOne: async (req, res) => {
     try {
-      const userId = req.user.id ? req.user.id : null;
+      const userId = null
+      if(req.param.userId){
+        userId = req.param.userId;
+      } else {
+        userId = req.user.id ? req.user.id : null;
+      }
       if(!userId) return res.status(400).send("userId required");
       const user = await customerModel.find({"_id": userId})
       return res.json(user).end();
@@ -24,10 +29,11 @@ module.exports = {
 
       const userUpdated = {}
       if (username) userUpdated.name = username;
-      if (description) userUpdated.description = description;
       if (address && address.length) userUpdated.full_address = address;
       if (location && location.lng && location.lat) userUpdated.location = { type: "Point", coordinates: [location.lng, location.lat] };
       if (picture) userUpdated.picture = picture;
+      userUpdated.description = description;
+
       const user = await customerModel.updateOne({"_id": userId}, userUpdated);
       
       return res.json(user).end();
