@@ -8,16 +8,13 @@ const favoriteModel = require("../favorite/favorite.model").FavoriteModel;
 module.exports = {
   getAllWorks: async (req, res) =>{
     try {
-      //recogemos trabajos sin la foto
       const workList = await workModel.find({}, '-picture').sort({uploadDate: -1});
 
-      //por cada trabajo recogemos su miniatura
       const thumbPromises = workList.map(async (work)=>{
         return thumbnailModel.findOne({"_id_picture":work._id})
       })
       const thumbList = await Promise.all(thumbPromises);
 
-      //por cada trabajo recogemos su artista
       const userPromises = workList.map(async (work)=>{
         return customerModel.findById(work._id_artist)
       })
@@ -33,7 +30,6 @@ module.exports = {
       })
       const likedList = await Promise.all(likedPromises);
 
-      //pasamos por cada trabajo y unimos todos los datos en un objeto
       const workWithUser = workList.map((work, index)=>{
         return {
           thumb:thumbList[index],
