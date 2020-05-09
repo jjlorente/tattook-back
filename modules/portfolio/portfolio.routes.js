@@ -6,6 +6,7 @@ const timeout = require('connect-timeout');
 
 const PortfolioCtrl = require("./portfolio.controller");
 
+router.get('/user/:userId', PortfolioCtrl.getList);
 router.get('/', PortfolioCtrl.getList);
 router.get('/:portfolioId', PortfolioCtrl.getOne);
 router.post('/', PortfolioCtrl.newOne);

@@ -1,7 +1,9 @@
 const portfolioModel = require("./portfolio.model").PortfolioModel;
 const workModel = require("../work/work.model").WorkModel
 const workPortfolioModel = require("../work/work_portfolio.model").WorkPortfolioModel
-const thumbnailModel = require("../work/thumbnail.model").ThumbnailModel
+const thumbnailModel = require("../work/thumbnail.model").ThumbnailModel;
+const customerModel = require("../user/user.model").CustomerModel;
+const favoriteModel = require("../favorite/favorite.model").FavoriteModel;
 const imageUtils = require("../../core/image-utils");
 
 module.exports = {
@@ -9,7 +11,12 @@ module.exports = {
   },
   getList: async (req, res) => {
     try {
-      const userId = req.user.id ? req.user.id : null;
+      let userId = null
+      if(req.params.userId){
+        userId = req.params.userId;
+      } else {
+        userId = req.user.id ? req.user.id : null;
+      }
       if(!userId) return res.status(400).send("UserId required");
       const portfolios = await portfolioModel.find({"_id_user": userId})
       return res.json(portfolios).end();
@@ -91,13 +98,41 @@ module.exports = {
     const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
     const limit = req.query.limit ? req.query.limit : null;
     try {
-      const workList = await workModel.find({_id_portfolio: portfolioId}, '_id').limit(Number(limit));
-      const thumbPromisesList = workList.map(async (work) => {
-        return thumbnailModel.find({"_id_picture": work._id});
-      });
-      let thumbList = await Promise.all(thumbPromisesList);
-      thumbList = thumbList.map(t=>t[0]);
-      return res.json(thumbList).end();
+      const workList = await workModel.find({_id_portfolio: portfolioId}, '-picture')
+        .sort({uploadDate: -1})
+        .limit(Number(limit));
+
+      const thumbPromises = workList.map(async (work)=>{
+        return thumbnailModel.findOne({"_id_picture": work._id})
+      })
+      const thumbList = await Promise.all(thumbPromises);
+
+      const userPromises = workList.map(async (work)=>{
+        return customerModel.findById(work._id_artist)
+      })
+      const userList = await Promise.all(userPromises);
+
+      const likesPromises = workList.map(async (work)=>{
+        return favoriteModel.find({"_id_item":work._id}).countDocuments();
+      })
+      const likesList = await Promise.all(likesPromises);
+      
+      const likedPromises = workList.map(async (work)=>{
+        return favoriteModel.findOne({"_id_item":work._id,"_id_customer":req.user.id});
+      })
+      const likedList = await Promise.all(likedPromises);
+
+      const workWithUser = workList.map((work, index)=>{
+        return {
+          thumb:thumbList[index],
+          work: work,
+          user: userList[index],
+          likes: likesList[index],
+          liked: likedList[index]
+        }
+      })
+
+      return res.json(workWithUser).end();
     } catch (error) {
       return res.status(500).json({error: "Error en recoger imagenes"}).end();
     }

@@ -3,9 +3,9 @@ const customerModel = require("../user/user.model").CustomerModel;
 module.exports = {
   getOne: async (req, res) => {
     try {
-      const userId = null
-      if(req.param.userId){
-        userId = req.param.userId;
+      let userId = null
+      if(req.params.userId){
+        userId = req.params.userId;
       } else {
         userId = req.user.id ? req.user.id : null;
       }
