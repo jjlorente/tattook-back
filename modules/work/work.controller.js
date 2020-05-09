@@ -20,6 +20,15 @@ module.exports = {
       })
       const userList = await Promise.all(userPromises);
 
+      // const userLikedPromises = userList.map(async (user)=>{
+      //   return favoriteModel.findOne({
+      //     "_id_item": user._id,
+      //     "item": "artist",
+      //     "_id_customer": req.user.id
+      //   });
+      // })
+      // const userLikedList = await Promise.all(userLikedPromises);
+
       const likesPromises = workList.map(async (work)=>{
         return favoriteModel.find({"_id_item":work._id}).countDocuments();
       })
@@ -36,7 +45,8 @@ module.exports = {
           work: work,
           user: userList[index],
           likes: likesList[index],
-          liked: likedList[index]
+          liked: likedList[index],
+          // followed: userLikedList[index]
         }
       })
       return res.json(workWithUser).end();

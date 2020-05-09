@@ -1,4 +1,5 @@
 const customerModel = require("../user/user.model").CustomerModel;
+const favoriteModel = require("../favorite/favorite.model").FavoriteModel;
 
 module.exports = {
   getOne: async (req, res) => {
@@ -9,9 +10,17 @@ module.exports = {
       } else {
         userId = req.user.id ? req.user.id : null;
       }
+      let followed = false;
+      if(req.params.userId){
+        followed = await favoriteModel.findOne({
+          "_id_item": userId,
+          "item": "artist",
+          "_id_customer": req.user.id
+        });
+      }
       if(!userId) return res.status(400).send("userId required");
-      const user = await customerModel.find({"_id": userId})
-      return res.json(user).end();
+      const user = await customerModel.findOne({"_id": userId})
+      return res.json({followed: followed, ...user._doc}).end();
     } catch (error) {
       return res.status(500).send("Error find userId").end();
     }
