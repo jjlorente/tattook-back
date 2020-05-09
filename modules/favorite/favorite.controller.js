@@ -24,7 +24,23 @@ module.exports = {
             return res.status(500).send("Error find userId").end();
         }
     },
+    getFavoritesUsers:async(req,res)=>{
+      try {
+        const userId = req.user.id ? req.user.id : null;
+        const itemType = req.query.type ? req.query.type : null;
 
+        const usersList = await favoriteModel.find({"item":itemType,"_id_customer": userId});
+
+        const userPromises = usersList.map(async (user)=>{
+          return customerModel.findById(user._id_item)
+        })
+        const userList = await Promise.all(userPromises);
+
+        return res.json(userList).end();
+      } catch (error) {
+        return res.status(500).json({error: "Error en recoger imagenes"}).end();
+      }
+    },
     getFavoritesTattoos: async (req,res)=>{
         try {
             const userId = req.user.id ? req.user.id : null;
