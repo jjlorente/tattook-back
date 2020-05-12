@@ -20,7 +20,9 @@ module.exports = {
       }
       if(!userId) return res.status(400).send("userId required");
       const user = await customerModel.findOne({"_id": userId})
-      return res.json({followed: followed, ...user._doc}).end();
+      const follows = await favoriteModel.find({"item": "artist","_id_item": userId}).countDocuments();
+      const followedCount = await favoriteModel.find({"item": "artist","_id_customer": userId}).countDocuments();
+      return res.json({followed: followed, follows: follows, followedCount: followedCount, ...user._doc}).end();
     } catch (error) {
       return res.status(500).send("Error find userId").end();
     }
