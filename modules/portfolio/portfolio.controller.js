@@ -70,12 +70,14 @@ module.exports = {
 
     const portfolioId = req.params.portfolioId ? req.params.portfolioId : null;
     const dataType = req.body.dataType ? req.body.dataType : null;
+    const description = req.body.description ? req.body.description : null;
     const image = req.body.image ? req.body.image : null;
     if(!image) return res.status(401).json({error: "El parámetro image no puede ser null"}).end();
     if(!dataType) return res.status(401).json({error: "El parámetro dataType no puede ser null"}).end();
     try {
       const work = new workModel();
       work.picture = image;
+      work.description = description;
       work.format_type = dataType;
       work._id_artist = req.user.id;
       work._id_portfolio = portfolioId;
