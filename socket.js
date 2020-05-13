@@ -1,8 +1,8 @@
 const tokenModel = require("./core/auth/token.model");
 const messageModel = require("./modules/chat/message.model").MessageModel;
 const chatModel = require("./modules/chat/chat.model").ChatModel;
-module.exports = () => {
-  const io = require('socket.io')(3200)
+module.exports = (app) => {
+  const io = require('socket.io')(app)
   io.on('connection', (socket) => {
     console.log('socket connected')
     socket.on('disconnect', () => {

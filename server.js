@@ -15,6 +15,6 @@ module.exports = (app) => {
         app.listen(process.env.PORT || 3000, function () {
             console.log('Servidor escuchando en puerto '+process.env.PORT || 3000+'!');
         });
-        socket();
+        socket(app);
     });
 }
