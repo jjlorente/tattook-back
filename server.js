@@ -12,9 +12,9 @@ module.exports = (app) => {
     db.once('open', function() {
         console.log('db conected');
         loadTag();
-        app.listen(process.env.PORT || 3000, function () {
+        const server = app.listen(process.env.PORT || 3000, function () {
             console.log('Servidor escuchando en puerto '+process.env.PORT || 3000+'!');
         });
-        socket(app);
+        socket(server);
     });
 }
