@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 const loadTag = require("./modules/work/tag.model").loadTags;
+const socket = require("./socket");
 
 module.exports = (app) => {
     const db = mongoose.connection;
@@ -14,5 +15,6 @@ module.exports = (app) => {
         app.listen(process.env.PORT || 3000, function () {
             console.log('Servidor escuchando en puerto '+process.env.PORT || 3000+'!');
         });
+        socket();
     });
 }

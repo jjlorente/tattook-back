@@ -11,5 +11,9 @@ module.exports = {
             },
             process.env.SECRET
         );
+    },
+    decodeToken: (token)=> {
+      const decoded = jwt.decode(token, process.env.SECRET);
+      return decoded;
     }
 }
