@@ -31,10 +31,15 @@ module.exports = {
       const userId = req.params.userId ? req.params.userId : null;
       if(!userId) return res.status(400).send("user id required");
       try {
-        const chat = await chatModel.findOne({members: { "$all" : [req.user.id, userId]} })
-        const messages = await messageModel.find({"_id_chat": chat._id}).sort({date:1});
+        const chat = await chatModel.findOne({members: { "$all" : [req.user.id, userId]} }, "_id")
+        let messages = [];
+        if(chat){
+          const chatId = chat.id;
+          messages = await messageModel.find({"_id_chat": chatId}).sort({date:1});
+        }
         return res.send(messages).end()
       } catch (error) {
+        console.log(error)
         return res.status(500).send("Error find messages").end();
       }
     }

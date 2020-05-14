@@ -27,7 +27,17 @@ module.exports = {
       return res.status(500).send("Error find userId").end();
     }
   },
-
+  getList: async (req, res) => {
+    try {
+      const userId = req.user.id ? req.user.id : null;
+      if(!userId) return res.status(400).send("userId required");
+      const users = await customerModel.find({"role": "tattoo_artist"})
+      console.log(users)
+      return res.json(users).end();
+    } catch (error) {
+      return res.status(500).send("Error find users").end();
+    }
+  },
   setOne: async (req, res) => {
     try {
       const userId = req.user.id ? req.user.id : null;
