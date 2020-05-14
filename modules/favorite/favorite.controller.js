@@ -49,7 +49,7 @@ module.exports = {
             const tattoosList = await favoriteModel.find({"item":itemType,"_id_customer": userId});
 
             const workPromises = tattoosList.map(async (work)=>{
-                return workModel.findOne({"_id":work._id_item})
+                return workModel.findOne({"_id":work._id_item},'-picture')
               })
             const workList = await Promise.all(workPromises);
 

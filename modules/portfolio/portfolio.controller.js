@@ -6,6 +6,7 @@ const customerModel = require("../user/user.model").CustomerModel;
 const favoriteModel = require("../favorite/favorite.model").FavoriteModel;
 const imageUtils = require("../../core/image-utils");
 
+
 module.exports = {
   getOne: async (req, res) => {
   },
@@ -155,6 +156,7 @@ module.exports = {
       await thumbnailModel.deleteOne({"_id_picture": pictureId})
       await workPortfolioModel.deleteMany({"_id_work": pictureId});
       await workModel.deleteOne({"_id": pictureId});
+      await favoriteModel.deleteMany({"_id_item":pictureId,"item":"picture"});
       return res.json().end();
     } catch (error) {
       return res.status(500).json({error: "Error en recoger imagenes"}).end();
