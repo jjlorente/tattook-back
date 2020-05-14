@@ -24,7 +24,7 @@ module.exports = (server) => {
       console.log('new message', data)
       if(!data.token) console.log('auth failed');
       const decoded = tokenModel.decodeToken(data.token);
-      const chat = await chatModel.findOne({members: { "$in" : [decoded.id, data.to]} })
+      const chat = await chatModel.findOne({members: { "$all" : [decoded.id, data.to]} })
       await chatModel.updateOne({"_id": chat._id}, {date: new Date()})
       let chatId;
       if(chat){
