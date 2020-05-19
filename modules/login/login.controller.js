@@ -1,5 +1,6 @@
 const customerModel = require("../user/user.model").CustomerModel;
 const tokenModel    = require("../../core/auth/token.model");
+const thumbnailModel = require("../../core/image-utils");
 
 module.exports = {
   login: async (req, res) => {
@@ -25,12 +26,15 @@ module.exports = {
             console.log(customer)
           }
         } else {
+          let pictureToSave = null;
+          if(!userPicture || userPicture && !userPicture.length) pictureToSave = require('./default-image');
+          else pictureToSave = userPicture;
           customer = new customerModel({ 
             name: userName, 
             provider: userProvider,
             email: userEmail,
             role: userRole,
-            picture: userPicture,
+            picture: pictureToSave,
             lastDate: new Date()
           });
           if(location) customer.location = { type: "Point", coordinates: [location.lng, location.lat] };
