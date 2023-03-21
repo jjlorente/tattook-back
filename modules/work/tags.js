@@ -1,0 +1,22 @@
+module.exports = [
+  'Black and Gray',
+  'Blackwork',
+  'Chicano',
+  'Dotwork',
+  'Fine-line',
+  'Geometric',
+  'Hand-Poked',
+  'Horror',
+  'Japanese (Irezumi)',
+  'Lettering',
+  'Neo Traditional',
+  'New School',
+  'Ornamental',
+  'Realism',
+  'Illustrative',
+  'Old School (Traditional)',
+  'Trash Polka Style',
+  'Tribal',
+  'Watercolor',
+  'Surrealism'
+];
